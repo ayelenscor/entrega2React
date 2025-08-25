@@ -1,15 +1,19 @@
 import './App.css'
-import Cart from './components/Cart'
-import Menu from './components/menu'
-import Search from './components/Search'
+import NavBar from './components/NavBar'
+import CartWidget from './components/CartWidget'
+import ItemListContainer from './components/ItemListContainer'
 
 function App() {
   return (
-    <div style={{ display: 'flex', gap: '10px' }}>
-      <Menu />
-      <Cart text='Mi Carrito' />
-      <Search text='Buscar...' />
-    </div>
-  )
+    <>
+      <div className="navbar">
+        <NavBar />
+        <CartWidget />
+      </div>
+      <ItemListContainer greeting="¡Bienvenido a Frutilla Skin! 🍓" />
+    </>
+  );
 }
+
 export default App
+
