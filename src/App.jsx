@@ -1,19 +1,16 @@
-import './App.css'
+import { useState } from 'react'
 import NavBar from './components/NavBar'
-import CartWidget from './components/CartWidget'
 import ItemListContainer from './components/ItemListContainer'
 
 function App() {
+  const [cartCount, setCartCount] = useState(0)
+  const [category, setCategory] = useState('all')
   return (
     <>
-      <div className="navbar">
-        <NavBar />
-        <CartWidget />
-      </div>
-      <ItemListContainer greeting="¡Bienvenido a Frutilla Skin! 🍓" />
+      <NavBar cartCount={cartCount} setCategory={setCategory} />
+      <ItemListContainer setCartCount={setCartCount} category={category} />
     </>
-  );
+  )
 }
 
 export default App
-
