@@ -7,7 +7,7 @@ function NavBar() {
   return (
     <Navbar expand="lg" style={{ backgroundColor: "#ff69b4" }} variant="dark">
       <Container>
-        <Navbar.Brand>Frutilla Skin 🍓</Navbar.Brand>
+        <Navbar.Brand>🍓Skin </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
