@@ -4,8 +4,14 @@ import Col from 'react-bootstrap/Col'
 import Image from 'react-bootstrap/Image'
 import Button from 'react-bootstrap/Button'
 import ItemCount from './ItemCount'
+import { Link } from "react-router-dom";
 
-function ItemDetail({ item, onBack, setCartCount }) {
+
+function ItemDetail({ item, onBack }) {
+
+   if (!item) {
+    return <p style={{ color: '#c71585' }}>Cargando producto...</p>;
+  }
   const imgStyle = { borderRadius: '12px', maxHeight: '400px', objectFit: 'cover', marginBottom: '20px' }
   const infoStyle = {
     padding: '16px',
@@ -15,15 +21,20 @@ function ItemDetail({ item, onBack, setCartCount }) {
     backgroundColor: '#fff0f5',
   };
 
-  const handleAddToCart = (count) => {
-    setCartCount(prev => prev + count);
-  };
-
   return (
     <Container className="mt-4">
-      <Button variant="secondary" onClick={onBack} style={{ marginBottom: '20px' }}>
-        Volver
-      </Button>
+      <Link to="/category/all" style={{ textDecoration: 'none' }}>
+  <Button
+    style={{
+      marginBottom: '20px',
+      backgroundColor: '#ff69b4',
+      borderColor: '#ff69b4',
+      color: 'white',
+    }}
+  >
+    Volver
+  </Button>
+</Link>
       <Row>
         <Col md={6}>
           <Image src={item.thumbnail} alt={item.title} fluid style={imgStyle} />
@@ -33,7 +44,7 @@ function ItemDetail({ item, onBack, setCartCount }) {
             <h2 style={{ color: '#c71585' }}>{item.title}</h2>
             <p style={{ color: '#ff1493', fontWeight: 'bold' }}>Precio: ${item.price}</p>
             <p>{item.description}</p>
-            <ItemCount stock={item.stock} initial={1} onAdd={handleAddToCart} />
+            <ItemCount stock={item.stock} initial={1} />
           </div>
         </Col>
       </Row>

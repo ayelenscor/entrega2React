@@ -1,31 +1,29 @@
-import { useState, useEffect } from 'react'
-import ItemList from './ItemList'
-import ItemDetail from './ItemDetail'
+import { useParams } from "react-router"
+import { useEffect, useState } from "react"
+import ItemList from "./ItemList"
 
-function ItemListContainer({ setCartCount, category }) {
-  const [items, setItems] = useState([])
-  const [selectedItem, setSelectedItem] = useState(null)
+function ItemListContainer({ category: defaultCategory }) {
+  const { id } = useParams();
+  const category = id || defaultCategory;
+  const [products, setProducts] = useState([])
 
   useEffect(() => {
-    let url = 'https://dummyjson.com/products'
-
-    if (category === 'Limpieza Facial') url = 'https://dummyjson.com/products/category/smartphones'
-    if (category === 'Limpieza Corporal') url = 'https://dummyjson.com/products/category/laptops'
-    if (category === 'Hidratacion') url = 'https://dummyjson.com/products/category/fragrances'
+    const url = category && category !== "all"
+      ? `https://dummyjson.com/products/category/${category}`
+      : `https://dummyjson.com/products`;
 
     fetch(url)
       .then(res => res.json())
-      .then(data => setItems(data.products));
-  }, [category])
+      .then(data => setProducts(data.products))
+  }, [category]);
 
   return (
-    <>
-      {selectedItem ? (
-        <ItemDetail item={selectedItem} onBack={() => setSelectedItem(null)} setCartCount={setCartCount} />
-      ) : (
-        <ItemList items={items} onSelect={setSelectedItem} />
-      )}
-    </>
+    <div style={{ padding: "20px" }}>
+      <h2 style={{ color: "#c71585", textTransform: "capitalize" }}>
+        {category === "all" ? "Todos los productos" : category}
+      </h2>
+      <ItemList items={products} />
+    </div>
   );
 }
 

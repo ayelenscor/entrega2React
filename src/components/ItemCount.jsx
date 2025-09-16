@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Button from 'react-bootstrap/Button'
 
-function ItemCount({ stock, initial, onAdd }) {
+function ItemCount({ stock, initial }) {
   const [count, setCount] = useState(initial)
 
   const handleIncrease = () => { if (count < stock) setCount(count + 1); }
@@ -14,7 +14,7 @@ function ItemCount({ stock, initial, onAdd }) {
       <Button variant="outline-danger" onClick={handleIncrease} style={{ borderColor: '#ff69b4', color: '#c71585' }}>+</Button>
       <Button 
         style={{ marginLeft: '10px', backgroundColor: '#ff69b4', borderColor: '#ff69b4', color: '#fff' }}
-        onClick={() => onAdd(count)}>
+      >
         Agregar al carrito
       </Button>
     </div>
@@ -22,5 +22,4 @@ function ItemCount({ stock, initial, onAdd }) {
 }
 
 export default ItemCount
-
 
