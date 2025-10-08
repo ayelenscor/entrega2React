@@ -1,20 +1,24 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { CartContext } from '../Context/CartProvider'
 import Button from 'react-bootstrap/Button'
 
-function ItemCount({ stock, initial }) {
-  const [count, setCount] = useState(initial)
+function ItemCount({ item }) {
+  const [count, setCount] = useState(1);
+  const { addToCart } = useContext(CartContext);
 
-  const handleIncrease = () => { if (count < stock) setCount(count + 1); }
+  const handleIncrease = () => setCount(count + 1);
   const handleDecrease = () => { if (count > 1) setCount(count - 1); }
 
+  const handleAddToCart = () => {
+    addToCart(item, count);
+  };
+
   return (
-    <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-      <Button variant="outline-danger" onClick={handleDecrease} style={{ borderColor: '#ff69b4', color: '#c71585' }}>-</Button>
+    <div className="item-count">
+      <Button onClick={handleDecrease} variant="outline-danger">-</Button>
       <span style={{ margin: '0 10px', fontWeight: 'bold', color: '#c71585' }}>{count}</span>
-      <Button variant="outline-danger" onClick={handleIncrease} style={{ borderColor: '#ff69b4', color: '#c71585' }}>+</Button>
-      <Button 
-        style={{ marginLeft: '10px', backgroundColor: '#ff69b4', borderColor: '#ff69b4', color: '#fff' }}
-      >
+      <Button onClick={handleIncrease} variant="outline-danger">+</Button>
+      <Button onClick={handleAddToCart} style={{ marginLeft: '10px', backgroundColor: '#ff69b4', borderColor: '#ff69b4', color: 'white' }}>
         Agregar al carrito
       </Button>
     </div>
@@ -22,4 +26,3 @@ function ItemCount({ stock, initial }) {
 }
 
 export default ItemCount
-
