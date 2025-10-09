@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react'
-import Button from 'react-bootstrap/Button'
 import { CartContext } from '../Context/CartProvider'
+import Button from 'react-bootstrap/Button'
+
 
 function ItemCount({ item }) {
   const [count, setCount] = useState(1);
