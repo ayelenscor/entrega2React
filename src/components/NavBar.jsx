@@ -1,10 +1,11 @@
 import { Navbar, Nav, Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import CartWidget from './CartWidget'
+import "../App.css"
 
 function NavBar() {
   return (
-    <Navbar expand="lg" style={{ backgroundColor: '#ff69b4' }} variant="dark">
+    <Navbar expand="lg" className="navbar-custom" variant="dark">
       <Container>
         <Navbar.Brand as={Link} to="/">🍓Skin</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -1,55 +1,117 @@
-import { useContext } from "react"
+import { useContext, useState, useEffect } from "react"
 import { CartContext } from "../Context/CartProvider"
 import { Link } from "react-router-dom"
 import Button from "react-bootstrap/Button"
 import Image from "react-bootstrap/Image"
+import "../App.css"
+import { useNavigate } from "react-router-dom"
 
 function CartContainer() {
-  const { cart } = useContext(CartContext);
+  const { cart, removeFromCart, clearCart, addToCart } = useContext(CartContext);
+  const [removingId, setRemovingId] = useState(null);
+  const [showEmptyMessage, setShowEmptyMessage] = useState(cart.length === 0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setShowEmptyMessage(cart.length === 0);
+  }, [cart]);
+
+  const handleRemove = (id) => {
+    setRemovingId(id);
+    setTimeout(() => {
+      removeFromCart(id);
+      setRemovingId(null);
+    }, 300); 
+  };
+
+  const handleClear = () => {
+    clearCart();
+    setShowEmptyMessage(true);
+  };
+
+  const handleIncrease = (item) => {
+    addToCart(item, 1);
+  };
+
+  const handleDecrease = (item) => {
+    if (item.quantity > 1) {
+      addToCart(item, -1)
+    } else {
+      handleRemove(item.id)
+    }
+  };
+
+  const totalPrice = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  );
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2 style={{ color: "#c71585" }}>Carrito</h2>
+    <div className="cart-container">
+      <h2 className="cart-title">Carrito</h2>
 
-      {cart.length === 0 ? (
-        <p>No hay productos en el carrito.</p>
+      {showEmptyMessage ? (
+        <>
+          <p className="cart-empty-text">No hay productos en el carrito.</p>
+          <Link to="/">
+            <Button className="btn-pink">Volver</Button>
+          </Link>
+        </>
       ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {cart.map((item) => (
-            <li 
-              key={item.id} 
-              style={{ 
-                display: "flex", 
-                alignItems: "center",
-                justifyContent: "space-between", 
-                marginBottom: "10px", 
-                borderBottom: "1px solid #ffc0cb", 
-                paddingBottom: "10px" 
-              }}
-            >
-              <Image 
-                src={item.thumbnail || item.image} 
-                alt={item.title || item.name} 
-                rounded 
-                style={{ width: "80px", height: "80px", objectFit: "cover", marginRight: "10px" }}
-              />
-              <div style={{ flex: 1 }}>
-                <p style={{ margin: 0, fontWeight: "bold" }}>{item.title || item.name}</p>
-                <p style={{ margin: 0 }}>Cantidad: {item.quantity}</p>
-                <p style={{ margin: 0 }}>Precio: ${item.price}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+        <>
+          <ul className="cart-list">
+            {cart.map((item) => (
+              <li
+                key={item.id}
+                className={`cart-item ${removingId === item.id ? "removing" : ""}`}
+              >
+                <Image
+                  src={item.thumbnail || item.image}
+                  alt={item.title || item.name}
+                  rounded
+                  className="cart-img"
+                />
+                <div className="cart-item-info">
+                  <p className="cart-item-name">{item.title || item.name}</p>
+                  <p className="cart-item-detail">Precio: ${item.price}</p>
+                  <div style={{ display: "flex", alignItems: "center", gap: "5px", marginTop: "5px" }}>
+                    <Button className="btn-outline-pink" onClick={() => handleDecrease(item)}>-</Button>
+                    <span style={{ minWidth: "20px", textAlign: "center" }}>{item.quantity}</span>
+                    <Button className="btn-outline-pink" onClick={() => handleIncrease(item)}>+</Button>
+                  </div>
+                </div>
+                <Button
+                  variant="outline"
+                  className="cart-remove-btn"
+                  onClick={() => handleRemove(item.id)}
+                >
+                  Eliminar
+                </Button>
+              </li>
+            ))}
+          </ul>
 
-      <Link to="/">
-        <Button 
-          style={{ backgroundColor: "#ff69b4", borderColor: "#ff69b4", marginTop: "20px" }}
-        >
-          Volver
-        </Button>
-      </Link>
+          <div className="cart-total">Total: ${totalPrice}</div>
+
+          <div className="cart-actions">
+            <Button
+              variant="outline"
+              className="btn-outline-pink"
+              onClick={handleClear}
+            >
+              Vaciar carrito
+            </Button>
+
+            <Link to="/">
+              <Button className="btn-pink">Volver</Button>
+            </Link>
+
+            <Button className="btn-pink" onClick={() => navigate("/checkout")}>
+              Checkout 
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
